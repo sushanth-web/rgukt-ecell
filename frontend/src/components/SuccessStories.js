@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import { FaPlus, FaTrash, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const API_URL = "https://working-ecell-2.onrender.com/api/startups";
 
 /* STORY CARD */
 function StoryCard({ story, isAdmin, onDelete }) {
   return (
-    <article className="group relative shadow-xl overflow-hidden rounded-3xl bg-white shadow-md hover:shadow-xl transition duration-300 hover:-translate-y-2">
+    <article className="group relative shadow-lg overflow-hidden rounded-2xl bg-white hover:shadow-xl transition duration-300 w-72 flex-shrink-0">
 
       {isAdmin && (
         <button
           onClick={onDelete}
           className="absolute top-3 right-3 z-10 bg-red-500 text-white p-2 rounded-full"
         >
-          <FaTrash size={14} />
+          <FaTrash size={12} />
         </button>
       )}
 
-      <div className="relative h-60 w-full overflow-hidden">
+      <div className="relative h-40 w-full overflow-hidden">
         <img
           src={story.imageUrl}
           alt={story.title}
@@ -27,14 +27,14 @@ function StoryCard({ story, isAdmin, onDelete }) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B2E5F]/70 to-transparent" />
       </div>
 
-      <div className="p-7">
-        <h3 className="text-xl font-bold text-[#0B2E5F]">{story.title}</h3>
+      <div className="p-5">
+        <h3 className="text-lg font-bold text-[#0B2E5F]">{story.title}</h3>
 
-        <p className="mt-2 text-sm font-semibold text-orange-600">
+        <p className="mt-1 text-xs font-semibold text-orange-600">
           {story.name}
         </p>
 
-        <p className="mt-4 text-gray-600 text-[15px]">{story.desc}</p>
+        <p className="mt-3 text-gray-600 text-sm">{story.desc}</p>
       </div>
     </article>
   );
@@ -43,6 +43,7 @@ function StoryCard({ story, isAdmin, onDelete }) {
 export default function Startups() {
 
   const navigate = useNavigate();
+  const scrollRef = useRef(null);
 
   const [stories, setStories] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -61,16 +62,11 @@ export default function Startups() {
   /* FETCH STARTUPS */
   const fetchStartups = async () => {
     try {
-
       const res = await fetch(API_URL);
       const data = await res.json();
-
       setStories(data);
-
     } catch (error) {
-
       console.error("Fetch error:", error);
-
     }
   };
 
@@ -80,33 +76,27 @@ export default function Startups() {
 
   /* IMAGE SELECT */
   const handleImageSelect = (e) => {
-
     const file = e.target.files[0];
-
     if (file) {
       setNewStory({
         ...newStory,
         image: file,
       });
     }
-
   };
 
   /* ADD STARTUP */
   const handleAddStory = async () => {
-
     if (!newStory.title || !newStory.name || !newStory.desc || !newStory.image)
       return;
 
     const formData = new FormData();
-
     formData.append("title", newStory.title);
     formData.append("name", newStory.name);
     formData.append("desc", newStory.desc);
     formData.append("image", newStory.image);
 
     try {
-
       await fetch(API_URL, {
         method: "POST",
         body: formData,
@@ -124,37 +114,43 @@ export default function Startups() {
       setShowModal(false);
 
     } catch (error) {
-
       console.error("Add startup error:", error);
-
     }
   };
 
   /* DELETE STARTUP */
   const handleDelete = async (id) => {
-
     try {
-
       await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
       });
 
       fetchStartups();
-
     } catch (error) {
-
       console.error("Delete error:", error);
-
     }
   };
 
   /* LOGOUT */
   const handleLogout = () => {
-
     localStorage.removeItem("isAdmin");
     setIsAdmin(false);
     navigate("/");
+  };
 
+  /* SCROLL FUNCTIONS */
+  const scrollLeft = () => {
+    scrollRef.current.scrollBy({
+      left: -300,
+      behavior: "smooth",
+    });
+  };
+
+  const scrollRight = () => {
+    scrollRef.current.scrollBy({
+      left: 300,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -177,7 +173,6 @@ export default function Startups() {
 
           {isAdmin && (
             <div className="absolute right-0 top-0 flex gap-3">
-
               <button
                 onClick={() => setShowModal(true)}
                 className="bg-orange-500 text-white p-3 rounded-full"
@@ -191,22 +186,43 @@ export default function Startups() {
               >
                 Logout
               </button>
-
             </div>
           )}
         </div>
 
-        {/* STORIES GRID */}
-        <div className="mt-14 grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-10">
+        {/* SCROLLABLE STORIES */}
+        <div className="relative mt-14">
 
-          {stories.map((story) => (
-            <StoryCard
-              key={story._id}
-              story={story}
-              isAdmin={isAdmin}
-              onDelete={() => handleDelete(story._id)}
-            />
-          ))}
+          {/* LEFT BUTTON */}
+          <button
+            onClick={scrollLeft}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md p-3 rounded-full"
+          >
+            <FaChevronLeft />
+          </button>
+
+          {/* STORIES CONTAINER */}
+          <div
+            ref={scrollRef}
+            className="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar px-12"
+          >
+            {stories.map((story) => (
+              <StoryCard
+                key={story._id}
+                story={story}
+                isAdmin={isAdmin}
+                onDelete={() => handleDelete(story._id)}
+              />
+            ))}
+          </div>
+
+          {/* RIGHT BUTTON */}
+          <button
+            onClick={scrollRight}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md p-3 rounded-full"
+          >
+            <FaChevronRight />
+          </button>
 
         </div>
       </div>
@@ -214,7 +230,6 @@ export default function Startups() {
       {/* ADD STARTUP MODAL */}
       {showModal && isAdmin && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-
           <div className="bg-white p-6 rounded-xl w-96 space-y-3">
 
             <h2 className="text-xl font-semibold text-center">
@@ -276,7 +291,6 @@ export default function Startups() {
             </div>
 
           </div>
-
         </div>
       )}
     </section>
