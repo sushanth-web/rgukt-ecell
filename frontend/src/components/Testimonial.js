@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Plus, Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://localhost:5000/api/speakers";
+const API_URL = "https://working-ecell-2.onrender.com/api/speakers";
 
 export default function InspirationalSpeakers() {
 

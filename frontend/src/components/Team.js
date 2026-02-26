@@ -8,7 +8,7 @@ import {
   FaTrash,
 } from "react-icons/fa";
 
-const API_URL = "http://localhost:5000/api/team";
+const API_URL = "https://working-ecell-2.onrender.com/api/team";
 
 export default function Team() {
   const navigate = useNavigate();
