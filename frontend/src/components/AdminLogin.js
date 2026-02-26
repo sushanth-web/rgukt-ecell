@@ -12,7 +12,7 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (form.email === "venu@gmail.com" && form.password === "venu@9307") {
+    if (form.email === "epsc@rguktong.ac.in" && form.password === "ecell@Ongole") {
       localStorage.setItem("isAdmin", "true");
       navigate("/events");
     } else {
