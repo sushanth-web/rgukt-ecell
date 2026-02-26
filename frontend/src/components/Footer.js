@@ -80,18 +80,18 @@ export default function Footer() {
                 <li>RGUKT Ongole Campus</li>
                 <li>
                   <a
-                    href="mailto:ecell@rguktongole.ac.in"
+                    href="mailto:epsc@rguktong.ac.in"
                     className="hover:text-white transition"
                   >
-                    ecell@rguktongole.ac.in
+                    epsc@rguktong.ac.in
                   </a>
                 </li>
                 <li>
                   <a
-                    href="tel:+9191XXXXXXXXXX"
+                    href="tel:+919703695946"
                     className="hover:text-white transition"
                   >
-                    +91 91XXXXXXXXXX
+                    +91 9703695946
                   </a>
                 </li>
               </ul>
@@ -104,7 +104,7 @@ export default function Footer() {
               <div className="mt-4 flex justify-center md:justify-start gap-4">
 
                 <SocialLink
-                  href="https://www.instagram.com/bloodyromeos/"
+                  href="https://www.instagram.com/ecro_council?igsh=MWpnb2xtNHd3aGg3NA=="
                   label="Instagram"
                   hover="hover:bg-gradient-to-tr hover:from-[#f58529] hover:via-[#dd2a7b] hover:to-[#8134af]"
                 >
@@ -112,7 +112,7 @@ export default function Footer() {
                 </SocialLink>
 
                 <SocialLink
-                  href="https://www.linkedin.com/company/e-cell-rgukt-ongole/"
+                  href="https://www.linkedin.com/in/entrepreneurship-cell-rgukt-ongole-032925386?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
                   label="LinkedIn"
                   hover="hover:bg-[#0A66C2]"
                 >
